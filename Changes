@@ -1,4 +1,7 @@
 Revision history for WWW-Shorten-Googl
+
+0.02    2016.03.21
+		Add git info metadata.
  
 0.01    2016.03.17
         First version, needing tests.
