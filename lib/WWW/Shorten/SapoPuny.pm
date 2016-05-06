@@ -3,7 +3,7 @@
 
 =head1 NAME
 
-WWW::Shorten::SapoPuny - Perl interface to sl.pt
+WWW::Shorten::SapoPuny - Perl interface to xsl.pt
 
 =head1 SYNOPSIS
 
@@ -16,7 +16,7 @@ WWW::Shorten::SapoPuny - Perl interface to sl.pt
 
 =head1 DESCRIPTION
 
-A Perl interface to the web site sl.pt.  SapoPuny simply maintains
+A Perl interface to the web site xsl.pt.  SapoPuny simply maintains
 a database of long URLs, each of which has a unique identifier.
 
 =cut
@@ -43,17 +43,21 @@ it your long URL and will return the shorter SapoPuny version.
 
 =cut
 
-#javascript:void(location.href='http://sl.pt/punify?url='+encodeURIComponent(location.href))
+#javascript:void(location.href='http://xsl.pt/punify?url='+encodeURIComponent(location.href))
 
 sub makeashorterlink
 {
     my $url = shift or croak 'No URL passed to makeashorterlink';
     $_error_message = '';
     my $ua = __PACKAGE__->ua();
-    my $tinyurl = 'http://sl.pt/punify?url=';
+    my $tinyurl = 'http://xsl.pt/punify?url=';
+    print STDERR $tinyurl . $url;
     my $resp = $ua->get($tinyurl . $url);
     
-    return undef unless $resp->is_success;
+    unless ($resp->is_success) {
+        $_error_message = $resp->status_line;
+        return undef;
+    }
 
 
     my $content = $resp->content;
@@ -67,7 +71,7 @@ sub makeashorterlink
         }
         return undef ;
     }
-    if ($resp->content =~ m!(http://[a-z0-9]+\.[a-z0-9]+\.sl\.pt)!x) {
+    if ($resp->content =~ m!(http://[a-z0-9]+\.[a-z0-9]+\.xsl\.pt)!x) {
         return $1;
     }
     return;
@@ -89,7 +93,7 @@ sub makealongerlink
     $_error_message = '';
     my $ua = __PACKAGE__->ua();
 
-    return undef unless $tinyurl_url =~ m!http://[a-z0-9]+\.[a-z0-9]+\.sl\.pt!;
+    return undef unless $tinyurl_url =~ m!http://[a-z0-9]+\.[a-z0-9]+\.xsl\.pt!;
 
     my $resp = $ua->get($tinyurl_url);
 
@@ -134,6 +138,6 @@ Alberto Simões C<< <ambs@cpan.org> >>
 
 =head1 SEE ALSO
 
-L<WWW::Shorten>, L<perl>, L<http://sl.pt/>
+L<WWW::Shorten>, L<perl>, L<http://xsl.pt/>
 
 =cut
